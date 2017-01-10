@@ -21,19 +21,6 @@ var defaultCorsHeaders = {
 var requestHandler = function(request, response) {
   var messages;
   var fs = require('fs');
-  // fs.open('myfile', 'wx', (err, fd) => {
-  //   if (err) {
-  //     if (err.code === 'EEXIST') {
-  //       console.error('myfile already exists');
-  //       return;
-  //     } else {
-  //       throw err;
-  //     }
-  //   }
-    
-    
-  // });
-
 
   var statusCode;
   var headers = defaultCorsHeaders;
