@@ -65,7 +65,7 @@ var app = {
       success: function(data) {
         // Don't bother if we have nothing to work with
       
-        data = JSON.parse(data);
+        data = JSON.parse(data); //added
 
         if (!data.results || !data.results.length) { return; }
         
@@ -73,7 +73,7 @@ var app = {
         app.messages = data.results;
 
         // Get the last message
-        var mostRecentMessage = data.results[0];
+        var mostRecentMessage = data.results[0]; //added
 
         // Only bother updating the DOM if we have a new message
         if (mostRecentMessage.objectId !== app.lastMessageId) {

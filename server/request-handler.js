@@ -18,9 +18,22 @@ var defaultCorsHeaders = {
   'access-control-max-age': 10 // Seconds.
 };
 
-var messages = [];
-
 var requestHandler = function(request, response) {
+  var messages;
+  var fs = require('fs');
+  // fs.open('myfile', 'wx', (err, fd) => {
+  //   if (err) {
+  //     if (err.code === 'EEXIST') {
+  //       console.error('myfile already exists');
+  //       return;
+  //     } else {
+  //       throw err;
+  //     }
+  //   }
+    
+    
+  // });
+
 
   var statusCode;
   var headers = defaultCorsHeaders;
@@ -37,7 +50,7 @@ var requestHandler = function(request, response) {
     console.log('wrong endpoint');
     statusCode = 404;
     response.writeHead(statusCode, headers);
-    response.end('rror');
+    response.end('error');
  
   
   } else if (request.method === 'OPTIONS') {
@@ -51,18 +64,40 @@ var requestHandler = function(request, response) {
     response.end();
   
   } else if (request.method === 'GET') {
-    statusCode = 200;
-    response.writeHead(statusCode, headers);
-    response.end(JSON.stringify( {results: messages} ));
+    fs.readFile('message.txt', (err, data) => {
+      if (err) {
+        console.log('error');
+        throw err;
+      }
+      messages = JSON.parse(data);
+      statusCode = 200;
+      response.writeHead(statusCode, headers);
+      response.end(JSON.stringify( {results: messages} ));
+    });  
+    
   } else if (request.method === 'POST') {
-    statusCode = 201;
-    response.writeHead(statusCode, headers);
-    request.on('data', function(data) {
-      var current = JSON.parse(data);
-      current.objectId = messages.length + 1;
-      messages.unshift(current);
-    });
-    response.end(JSON.stringify(messages));
+    fs.readFile('message.txt', (err, data) => {
+      if (err) {
+        console.log('error');
+        throw err;
+      }
+      messages = JSON.parse(data);
+      statusCode = 201;
+      response.writeHead(statusCode, headers);
+      request.on('data', function(data) {
+        var current = JSON.parse(data);
+        current.objectId = messages.length + 1;
+        messages.unshift(current);
+        fs.writeFile('message.txt', JSON.stringify(messages), (err) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log('It\'s saved!');
+        });
+      });
+      response.end(JSON.stringify(messages));
+    }); 
+    
   }
 };
 
