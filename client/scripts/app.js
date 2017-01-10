@@ -66,7 +66,7 @@ var app = {
         // Don't bother if we have nothing to work with
       
         data = JSON.parse(data);
-        console.log(data.results);
+
         if (!data.results || !data.results.length) { return; }
         
         // Store messages for caching later
@@ -74,8 +74,7 @@ var app = {
 
         // Get the last message
         var mostRecentMessage = data.results[0];
-        console.log('mostRecentMessage.objectId', mostRecentMessage.objectId);
-        console.log('app.lastMessageId', app.lastMessageId);
+
         // Only bother updating the DOM if we have a new message
         if (mostRecentMessage.objectId !== app.lastMessageId) {
           // Update the UI with the fetched rooms
