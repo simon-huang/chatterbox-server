@@ -64,14 +64,18 @@ var app = {
       contentType: 'application/json',
       success: function(data) {
         // Don't bother if we have nothing to work with
+      
+        data = JSON.parse(data);
+        console.log(data.results);
         if (!data.results || !data.results.length) { return; }
-
+        
         // Store messages for caching later
         app.messages = data.results;
 
         // Get the last message
-        var mostRecentMessage = data.results[data.results.length - 1];
-
+        var mostRecentMessage = data.results[0];
+        console.log('mostRecentMessage.objectId', mostRecentMessage.objectId);
+        console.log('app.lastMessageId', app.lastMessageId);
         // Only bother updating the DOM if we have a new message
         if (mostRecentMessage.objectId !== app.lastMessageId) {
           // Update the UI with the fetched rooms
@@ -226,7 +230,7 @@ var app = {
 
   startSpinner: function() {
     $('.spinner img').show();
-    $('form input[type=submit]').attr('disabled', 'true');
+    //$('form input[type=submit]').attr('disabled', 'true');
   },
 
   stopSpinner: function() {
